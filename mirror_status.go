@@ -43,10 +43,18 @@ func mirrorStatusesHandler(w http.ResponseWriter, r *http.Request) {
 	}
 
 	var mirrorStatuses []MirrorStatus
+	mirrorStatusChan := make(chan MirrorStatus)
+
 	for _, mirror := range mirrors {
 		url := mirror["url"].(string)
-		status, _ := checkMirror(url)
-		mirrorStatuses = append(mirrorStatuses, MirrorStatus{URL: url, Status: status})
+		go func(url string) {
+			status, _ := checkMirror(url)
+			mirrorStatusChan <- MirrorStatus{URL: url, Status: status}
+		}(url)
+	}
+
+	for i := 0; i < len(mirrors); i++ {
+		mirrorStatuses = append(mirrorStatuses, <-mirrorStatusChan)
 	}
 
 	mirrorStatusesJSON, err := json.MarshalIndent(mirrorStatuses, "", "    ")
