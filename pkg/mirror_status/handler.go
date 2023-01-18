@@ -8,25 +8,6 @@ import (
 	"os"
 )
 
-type MirrorStatus struct {
-	URL    string `json:"url"`
-	Status string `json:"status"`
-}
-
-// checkMirror function takes a URL as a parameter and uses the `http.Head` function to check the status of the mirror.
-// It returns the status of the mirror as a string, "online", "offline" or "unknown"
-func checkMirror(url string) (string, error) {
-	resp, err := http.Head(url)
-	if err != nil {
-		return "unknown", err
-	}
-	if resp.StatusCode >= 200 && resp.StatusCode < 400 {
-		return "online", nil
-	} else {
-		return "offline", nil
-	}
-}
-
 // MirrorStatusesHandler function reads the "mirrors.json" file, checks the status of each mirror, and returns the status of each mirror as a JSON response
 func MirrorStatusesHandler(w http.ResponseWriter, r *http.Request) {
 	file, err := os.Open("mirrors.json")

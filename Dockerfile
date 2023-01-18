@@ -1,10 +1,10 @@
 FROM golang:latest
 
-COPY . /app
+WORKDIR /go/src/mirror-monitoring
 
-WORKDIR /app
+COPY . .
 
-RUN go build -o mirror-monitoring .
+RUN go build -o mirror-monitoring cmd/main.go
 
 EXPOSE 8080
 
