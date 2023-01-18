@@ -1,4 +1,4 @@
-package main
+package mirror_status
 
 import (
 	"encoding/json"
@@ -27,8 +27,8 @@ func checkMirror(url string) (string, error) {
 	}
 }
 
-// mirrorStatusesHandler function reads the "mirrors.json" file, checks the status of each mirror, and returns the status of each mirror as a JSON response
-func mirrorStatusesHandler(w http.ResponseWriter, r *http.Request) {
+// MirrorStatusesHandler function reads the "mirrors.json" file, checks the status of each mirror, and returns the status of each mirror as a JSON response
+func MirrorStatusesHandler(w http.ResponseWriter, r *http.Request) {
 	file, err := os.Open("mirrors.json")
 	if err != nil {
 		http.Error(w, fmt.Sprintf("Error reading mirrors file: %v", err), http.StatusInternalServerError)
